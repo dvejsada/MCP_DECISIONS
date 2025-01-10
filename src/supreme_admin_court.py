@@ -47,7 +47,8 @@ def get_supreme_admin_court_decision(case_number):
     cells = row.find_all('td')
     if len(cells) >= 11:
         decision_data['date_of_decision'] = cells[2].get_text(strip=True)
-        decision_data['case_number'] = cells[3].get_text(strip=True)
+        case_number = cells[3].get_text(strip=True)
+        decision_data['case_number'] = case_number.replace("\xa0", " ")
         decision_data['type_of_decision'] = cells[5].get_text(strip=True)
         decision_data['outcome'] = cells[6].get_text(strip=True)
         decision_data['parties'] = cells[9].get_text(strip=True)
@@ -71,7 +72,7 @@ def get_supreme_admin_court_decision(case_number):
         if decision_pdf_link:
             decision_data['link_to _decision'] = decision_pdf_link
         else:
-            decision_data['link_to _decision'] = "No link is available"
+            decision_data['link_to _decision'] = "Žádný odkaz není k dispozici."
 
         if decision_text_link:
             # Send a GET request to the decision text URL using httpx
@@ -92,10 +93,14 @@ def get_supreme_admin_court_decision(case_number):
                 decision_text = decision_text.replace('\x00', '')
                 decision_data['decision_text'] = decision_text
             else:
-                decision_data['decision_text'] = 'Decision text not found.'
+                decision_data['decision_text'] = 'Text rozhodnutí nebyl nalezen.'
         else:
-            decision_data['decision_text'] = 'Decision text link not found.'
+            decision_data['decision_text'] = 'Okaz na text rozhodnutí nenalezen.'
 
-        return decision_data
+        decision_response = (f"{decision_data['type_of_decision']} Nejvyššího správního soudu č.j. {decision_data['case_number']}, ze dne {decision_data['date_of_decision']}. "
+                             f"Spor mezi {decision_data['parties']}, výsledek: {decision_data['outcome']}. Odkaz na rozsudek: {decision_data['link_to _decision']}."
+                             f"Text rozsudku: {decision_data['decision_text']}")
+
+        return decision_response
     else:
-        return "Failed to extract data from the webpage."
+        return "Nepodařilo se získaz data z webové stránky."

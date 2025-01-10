@@ -29,11 +29,12 @@ def create_server():
         """
         List available tools.
         Each tool specifies its arguments using JSON Schema validation.
+        Name must be maximum of 64 characters
         """
         return [
             types.Tool(
-                name="get-supreme-court-decision-by-case-no",
-                description="Get Czech Supreme court decision based on file number",
+                name="get-supreme-court-decision",
+                description="Get Czech Supreme court decision based on case number",
                 inputSchema={
                     "type": "object",
                     "properties": {
@@ -46,14 +47,14 @@ def create_server():
                 },
             ),
             types.Tool(
-                name="get-supreme-administrative-court-decision-by-case-no",
-                description="Get Czech Supreme Administrative court decision based on file number",
+                name="get-supreme-administrative-court-decision",
+                description="Get Czech Supreme Administrative court decision based on case number",
                 inputSchema={
                     "type": "object",
                     "properties": {
                         "case_number": {
                             "type": "string",
-                            "description": "Case number of the decision. Must contain 1 or 2 digits, break, than text 'Cdo', break and than case number, slash and year(e.g. 21 Cdo 1096/2021). If it does not contain text 'Cdo', it is not valid Supreme Administrative court case number",
+                            "description": "Case number of the decision. Must contain 1 or 2 digits, break, than registry identificator (one of the following: As | Ads | Afs | Aprk | Aprn | Ars | Azs | Ao | Aos | Av | Komp | Konf | Kse | Kseo | Kss | Ksz | Nk | Na | Ns | Nad | Nao | Obn | Pst | Vol | Rs | Nv), break and than case number, slash and year(e.g. 7 As 218/2021). If it does not contain correct registry identificator, it is not valid Supreme Administrative court case number",
                         },
                     },
                     "required": ["case_number"],
@@ -72,7 +73,7 @@ def create_server():
             raise ValueError("Missing arguments")
 
 
-        if name == "get-supreme-court-decision-by-case-no":
+        if name == "get-supreme-court-decision":
             case_no = arguments.get("case_number")
             if not case_no:
                 raise ValueError("Missing case number parameter")
@@ -86,7 +87,7 @@ def create_server():
                 )
             ]
 
-        elif name == "get-supreme-administrative-court-decision-by-case-no":
+        elif name == "get-supreme-administrative-court-decision":
             case_no = arguments.get("case_number")
             if not case_no:
                 raise ValueError("Missing case number parameter")
