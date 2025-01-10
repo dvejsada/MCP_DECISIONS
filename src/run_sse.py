@@ -22,7 +22,6 @@ class SSEHandler:
                 self.init_options
             )
 
-
 def main():
     server, init_options = create_server()
     sse_handler = SSEHandler(server, init_options)
@@ -36,7 +35,7 @@ def main():
     config = uvicorn.Config(
         app,
         host="0.0.0.0",
-        port=8956,
+        port=8957,
         log_level="debug",
         log_config=None
     )

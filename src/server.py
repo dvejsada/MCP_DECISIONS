@@ -1,8 +1,8 @@
 import mcp.types as types
 from mcp.server import Server, NotificationOptions
 from mcp.server.models import InitializationOptions
-from ares_call import ARES
-from supreme_court_call import get_decision
+from supreme_court import get_supreme_court_decision
+from supreme_admin_court import get_supreme_admin_court_decision
 import logging
 
 
@@ -44,6 +44,20 @@ def create_server():
                     },
                     "required": ["case_number"],
                 },
+            ),
+            types.Tool(
+                name="get-supreme-administrative-court-decision-by-case-no",
+                description="Get Czech Supreme Administrative court decision based on file number",
+                inputSchema={
+                    "type": "object",
+                    "properties": {
+                        "case_number": {
+                            "type": "string",
+                            "description": "Case number of the decision. Must contain 1 or 2 digits, break, than text 'Cdo', break and than case number, slash and year(e.g. 21 Cdo 1096/2021). If it does not contain text 'Cdo', it is not valid Supreme Administrative court case number",
+                        },
+                    },
+                    "required": ["case_number"],
+                },
             )
         ]
 
@@ -63,7 +77,21 @@ def create_server():
             if not case_no:
                 raise ValueError("Missing case number parameter")
 
-            result_text = get_decision(case_no)
+            result_text = get_supreme_court_decision(case_no)
+
+            return [
+                types.TextContent(
+                    type="text",
+                    text=result_text
+                )
+            ]
+
+        elif name == "get-supreme-administrative-court-decision-by-case-no":
+            case_no = arguments.get("case_number")
+            if not case_no:
+                raise ValueError("Missing case number parameter")
+
+            result_text = get_supreme_admin_court_decision(case_no)
 
             return [
                 types.TextContent(
