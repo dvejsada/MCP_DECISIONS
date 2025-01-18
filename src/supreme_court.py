@@ -78,6 +78,6 @@ def get_supreme_court_decision(file_no):
         rtf_text = f"Failed to extract text from RTF: {e}"
 
     # Assemble the result text
-    result = f"File No. {file_no},\nKategorie: {kategorie},\nPrávní věta': {pravni_veta},\nText: {rtf_text}"
+    result = f"File No. {file_no},\nKategorie: {kategorie},\nOdkaz: {rtf_link},\nPrávní věta: {pravni_veta},\nText: {rtf_text}"
 
     return result
