@@ -40,7 +40,7 @@ def create_server():
                     "properties": {
                         "case_number": {
                             "type": "string",
-                            "description": "Case number of the decision. Must contain 2 digits, break, than text 'Cdo', break and than case number, slash and year(e.g. 21 Cdo 1096/2021). If it does not contain text 'Cdo', it is not valid Supreme court case number",
+                            "description": "Case number of the decision. Must contain 2 digits, break, than text 'Cdo' or 'Tdo', break and than case number, slash and year(e.g. 21 Cdo 1096/2021). If it does not contain text 'Cdo' or 'Tdo', it is not valid Supreme court case number",
                         },
                     },
                     "required": ["case_number"],
