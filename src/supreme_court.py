@@ -1,4 +1,4 @@
-import requests
+import httpx
 from bs4 import BeautifulSoup
 import re
 from striprtf.striprtf import rtf_to_text
@@ -24,7 +24,7 @@ def get_supreme_court_decision(file_no):
     }
 
     # Fetch the search results page
-    response = requests.get(base_url, params=params)
+    response = httpx.get(base_url, params=params)
     response.encoding = 'utf-8'
 
     if response.status_code != 200:
@@ -67,7 +67,7 @@ def get_supreme_court_decision(file_no):
         return "Link for decision not found."
 
     # Download the RTF file
-    rtf_response = requests.get(rtf_link)
+    rtf_response = httpx.get(rtf_link)
     if rtf_response.status_code != 200:
         return "Failed to download the text of the decision."
 
