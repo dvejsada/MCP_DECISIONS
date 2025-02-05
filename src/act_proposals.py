@@ -1,4 +1,4 @@
-import requests
+import httpx
 import pandas as pd
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -16,7 +16,7 @@ class ActProposals:
         """Loads new data in dataframe"""
 
         # Send a GET request to the URL
-        response = requests.get(self.url)
+        response = httpx.get(self.url)
 
         # Check if the request was successful
         if response.status_code == 200:
@@ -60,12 +60,12 @@ class ActProposals:
 
     @staticmethod
     def get_details(row):
-
+        """Gets details of the specified amendment"""
         detailed_text = ""
 
         # Perform a GET request to obtain the HTML content
         url = row["Url"]
-        response = requests.get(url)
+        response = httpx.get(url)
         html_content = response.text
 
         # Parse the HTML content using BeautifulSoup
@@ -77,13 +77,34 @@ class ActProposals:
         okx_para = main_content_div.find('p', recursive=False, attrs={"class":"status okx"})
 
         for div in section_divs:
-            detailed_text += div.get_text(separator=' ', strip=False)
+            detailed_text += div.get_text(separator=' ', strip=True)
             detailed_text += "\n"
 
         if okx_para:
-            detailed_text += okx_para.get_text(separator=' ', strip=False)
+            detailed_text += okx_para.get_text(separator=' ', strip=True)
 
         return detailed_text
+
+    def query_proposals(self, query):
+        """Finds amendments based on act name"""
+        if self.check_time_difference():
+            self.load_data()
+
+        results: list = []
+        for index, row in self.db.iterrows():
+            if query in row["Krátký název"]:
+                results.append(self.db.iloc[index].to_dict())
+
+        result_text: str = ""
+        for item in results:
+            for key, value in item.items():
+                result_text += f"{key}: {value}\n"
+            result_text += "-------\n"
+
+        if result_text != "":
+            return result_text
+        else:
+            return "No such amendment found in Chamber of Deputies"
 
     def check_time_difference(self):
 
@@ -96,8 +117,3 @@ class ActProposals:
         else:
             return False
 
-if __name__ == "__main__":
-
-    db = ActProposals()
-    query = db.query_data("30")
-    print(query)
