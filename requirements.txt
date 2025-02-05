@@ -6,3 +6,4 @@ starlette~=0.45.2
 bs4==0.0.2
 striprtf==0.0.28
 pandas~=2.2.3
+lxml~=5.3.0
