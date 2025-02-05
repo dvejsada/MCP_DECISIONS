@@ -64,7 +64,7 @@ def create_server():
                 },
             ),
             types.Tool(
-                name="get-act-proposal-info",
+                name="get-act-proposal-info-by-number",
                 description="Get information on proposals in Czech Chamber of Deputies",
                 inputSchema={
                     "type": "object",
@@ -75,6 +75,20 @@ def create_server():
                         },
                     },
                     "required": ["proposal_number"],
+                },
+            ),
+            types.Tool(
+                name="find-act-proposal-by-name",
+                description="Find all acts or amendments proposals by the name of the act in the Chamber of Deputies.",
+                inputSchema={
+                    "type": "object",
+                    "properties": {
+                        "act_name": {
+                            "type": "string",
+                            "description": "Name of the act to search (e.g. zákoník práce, o inspekci práce). Do not use 'zákon' at the start of the name. Instead of 'zákon o inspekci práce', use only 'o inspekci práce'",
+                        },
+                    },
+                    "required": ["act_name"],
                 },
             )
         ]
@@ -118,12 +132,26 @@ def create_server():
                 )
             ]
 
-        elif name == "get-act-proposal-info":
+        elif name == "get-act-proposal-info-by-number":
             proposal_number = str(arguments.get("proposal_number"))
             if not proposal_number:
                 raise ValueError("Missing proposal number parameter")
 
             result_text = proposals.query_data(proposal_number)
+
+            return [
+                types.TextContent(
+                    type="text",
+                    text=result_text
+                )
+            ]
+
+        elif name == "find-act-proposal-by-name":
+            act_name = arguments.get("act_name")
+            if not act_name:
+                raise ValueError("Missing name of the act to find")
+
+            result_text = proposals.query_proposals(act_name)
 
             return [
                 types.TextContent(
