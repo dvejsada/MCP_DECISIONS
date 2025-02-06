@@ -17,13 +17,11 @@ class ActProposals:
 
         # Send a GET request to the URL
         response = httpx.get(self.url)
-
         # Check if the request was successful
         if response.status_code == 200:
             # Parse the HTML content using BeautifulSoup
-            soup = BeautifulSoup(response.content, 'html.parser')
+            soup = BeautifulSoup(response.content, 'html.parser', from_encoding="WINDOWS-1250")
             table = soup.find('table')
-
             # Read the table into a pandas DataFrame
             self.db = pd.read_html(str(table), header=0)[0]
 
@@ -69,7 +67,7 @@ class ActProposals:
         html_content = response.text
 
         # Parse the HTML content using BeautifulSoup
-        soup = BeautifulSoup(html_content, 'html.parser')
+        soup = BeautifulSoup(html_content, 'html.parser', from_encoding="WINDOWS-1250")
 
         # Find the div with id="main-content"
         main_content_div = soup.find('div', id='main-content')
