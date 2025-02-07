@@ -86,10 +86,6 @@ def get_constitutional_court_decision(case_no: str) -> str:
 
         doc_no = 3
 
-        print(senate_no)
-        print(docket_no)
-        print(year_no)
-
         for i in range(doc_no):
             case_url = f"https://nalus.usoud.cz/Search/GetText.aspx?sz={senate_no}-{docket_no}-{year_no}_{doc_no}"
             response = httpx.get(url=case_url)
