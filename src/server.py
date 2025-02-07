@@ -1,6 +1,8 @@
 import mcp.types as types
 from mcp.server import Server, NotificationOptions
 from mcp.server.models import InitializationOptions
+
+from constitutional_court import get_constitutional_court_decision
 from supreme_court import get_supreme_court_decision
 from supreme_admin_court import get_supreme_admin_court_decision
 from act_proposals import ActProposals
@@ -18,7 +20,7 @@ def create_server():
 
     init_options = InitializationOptions(
         server_name="decisions",
-        server_version="0.6",
+        server_version="0.7",
         capabilities=server.get_capabilities(
             notification_options=NotificationOptions(),
             experimental_capabilities={},
@@ -58,6 +60,20 @@ def create_server():
                         "case_number": {
                             "type": "string",
                             "description": "Case number of the decision. Must contain 1 or 2 digits, break, than registry identificator (one of the following: As | Ads | Afs | Aprk | Aprn | Ars | Azs | Ao | Aos | Av | Komp | Konf | Kse | Kseo | Kss | Ksz | Nk | Na | Ns | Nad | Nao | Obn | Pst | Vol | Rs | Nv), break and than case number, slash and year(e.g. 7 As 218/2021). If it does not contain correct registry identificator, it is not valid Supreme Administrative court case number",
+                        },
+                    },
+                    "required": ["case_number"],
+                },
+            ),
+            types.Tool(
+                name="get-constitutional-court-decision",
+                description="Get Constitutional court decision based on case number",
+                inputSchema={
+                    "type": "object",
+                    "properties": {
+                        "case_number": {
+                            "type": "string",
+                            "description": "Case number of the decision. Must contain senate number (Pl., I., II. etc), dot, than 'ÚS', break and than case number, slash and year(e.g. I.ÚS 23/23 or Pl.ÚS 1589/22). If it does not contain 'ÚS', it is not valid Constitutional court case number",
                         },
                     },
                     "required": ["case_number"],
@@ -124,6 +140,20 @@ def create_server():
                 raise ValueError("Missing case number parameter")
 
             result_text = get_supreme_admin_court_decision(case_no)
+
+            return [
+                types.TextContent(
+                    type="text",
+                    text=result_text
+                )
+            ]
+
+        elif name == "get-constitutional-court-decision":
+            case_no = arguments.get("case_number")
+            if not case_no:
+                raise ValueError("Missing case number parameter")
+
+            result_text = get_constitutional_court_decision(case_no)
 
             return [
                 types.TextContent(
