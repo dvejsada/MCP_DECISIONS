@@ -1,0 +1,7 @@
+services:
+  mcp-decisions:
+    image: georgx22/mcp-decisions:latest
+    container_name: mcp-decisions
+    restart: always
+    ports:
+      - "8957:8957"
