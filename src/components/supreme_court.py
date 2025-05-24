@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import re
 from striprtf.striprtf import rtf_to_text
 
-def get_supreme_court_decision(file_no):
+async def get_supreme_court_decision(file_no):
     # Extract components of the file number
     match = re.match(r'(\d+)\s+(\w+)\s+(\d+)/(\d+)', file_no)
     if not match or "Cdo" not in file_no:

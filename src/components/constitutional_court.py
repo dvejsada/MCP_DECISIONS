@@ -71,7 +71,7 @@ def extract_abstract_text(data) -> str:
     return formatted_text
 
 
-def get_constitutional_court_decision(case_no: str) -> str:
+async def get_constitutional_court_decision(case_no: str) -> str:
     """Return text of the constitutional court decision based on case number."""
 
     if check_case_no(case_no):

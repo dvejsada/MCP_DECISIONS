@@ -46,4 +46,4 @@ COPY src/ src/
 EXPOSE 8957
 
 # Run the application.
-CMD python /app/src/run_sse.py
+CMD python /app/src/main.py

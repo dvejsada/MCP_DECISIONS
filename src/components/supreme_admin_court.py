@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import quote_plus
 
 
-def get_supreme_admin_court_decision(case_number):
+async def get_supreme_admin_court_decision(case_number):
     # URL encode the file_number
     encoded_file_number = quote_plus(case_number)
 
