@@ -1,6 +1,6 @@
 ## What is it?
 
-A [Model Context Protocol](https://modelcontextprotocol.io/) Server running over SSE
+A [Model Context Protocol](https://modelcontextprotocol.io/) Server running using streamable-http,
 
 ## What it offers?
 
@@ -32,7 +32,7 @@ In addition, it also can assess proposals discussed in Czech Chamber of Deputies
 
 ---
 
-### 📋 `search-act-proposal`
+#### 📋 `search-act-proposal`
 
 **Description:** Searches for act proposals in the Czech Chamber of Deputies with automatic detection of search type (by number or by name).
 
