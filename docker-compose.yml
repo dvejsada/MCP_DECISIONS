@@ -1,7 +1,7 @@
 services:
-  mcp-decisions:
+  mcp-czech-legal:
     image: georgx22/mcp-decisions:latest
-    container_name: mcp-decisions
+    container_name: mcp-czech-legal
     restart: always
     ports:
       - "8957:8957"
